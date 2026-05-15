@@ -18,6 +18,7 @@ import platform
 import re
 import sys
 import sysconfig
+import threading
 import warnings
 import weakref
 from collections import UserDict
@@ -2242,8 +2243,6 @@ class TestGeneric:
 
     def test_device_recorder_per_thread_state(self):
         """``_device_recorder`` must keep ``marked`` per-thread (see #1700)."""
-        import threading
-
         recorder = tensordict_base._device_recorder
         assert not recorder.marked
         recorder.mark()
@@ -2271,8 +2270,6 @@ class TestGeneric:
     def test_non_blocking_thread_safe(self):
         """Concurrent ``TensorDict(..., device='cpu')`` must not race on
         ``_device_recorder.mark()`` (regression for #1700)."""
-        import threading
-
         source = {f"k{i}": torch.zeros(64, dtype=torch.float32) for i in range(64)}
 
         num_threads = 8
